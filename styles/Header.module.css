@@ -1,0 +1,21 @@
+.header {
+  width: 100%;
+}
+
+.top-title {
+  background-color: #ffffff;
+  background-color: red;
+  color: #000000;
+  padding: 1rem 0;
+}
+
+.title-wrap {
+  margin: auto;
+  text-align: center;
+}
+
+.title {
+  line-height: 1.15;
+  text-align: center;
+  font-size: 1rem;
+}
