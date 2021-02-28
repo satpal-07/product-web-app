@@ -11,6 +11,7 @@ const getProductQuery = () => {
         original_price
         currency_code
       }
+      offer_ids
     }
   }`;
 };

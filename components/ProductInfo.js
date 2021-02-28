@@ -1,3 +1,4 @@
+import styles from '../styles/ProductInfo.module.css'
 import Constants from '../contants/index';
 import Link from 'next/link';
 export default function ProductInfo({ product }) {

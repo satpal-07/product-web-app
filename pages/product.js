@@ -9,7 +9,7 @@ export async function getServerSideProps({ query }) {
   try {
     console.log('Loading the product info...');
     const product = await getProductInfo(query.id);
-    console.log('Loaded the product info.');
+    console.log('Finished loadingthe product info.');
     return {
       props: {
         product,
@@ -30,13 +30,11 @@ export default function Product({product}) {
     <div>
       <Head>
         <title>Create Next App</title>
-        <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header title='Product Info'></Header>
       <main>
         <ProductInfo product={product} />
       </main>
-
       <Footer />
     </div>
   );

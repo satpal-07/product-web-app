@@ -23,7 +23,6 @@ const getProductInfoQuery = (productId) => {
 export default async (productId) => {
   try {
     const response = await graphQlApi(getProductInfoQuery(productId));
-    console.log(response);
     return response.product;
   } catch (error) {
     console.error('Error in the get product info api: ' + error.message);
