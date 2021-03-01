@@ -1,11 +1,17 @@
 .select {
 }
 .submit {
+  cursor: pointer;
 }
 .form {
 }
-.form-wrap {
+.form-wrapper {
+  text-align: center;
+  padding: 2rem;
 }
 
 .option {
+}
+
+.label {
 }
