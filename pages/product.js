@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import styles from '../styles/Product.module.css';
 import getProductInfo from '../services/getProductInfo';
 import ProductInfo from '../components/ProductInfo';
+import Constants from '../contants';
 
 export async function getServerSideProps({ query }) {
   try {
@@ -31,7 +32,7 @@ export default function Product({product}) {
       <Head>
         <title>Create Next App</title>
       </Head>
-      <Header title='Product Info'></Header>
+      <Header title={Constants.HEADER}></Header>
       <main>
         <ProductInfo product={product} />
       </main>
