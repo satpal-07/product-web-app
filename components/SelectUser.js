@@ -2,7 +2,7 @@ import styles from '../styles/SelectUser.module.css'
 export default function SelectUser({ userId }) {
   const availableUserIds = [1, 2, 3, 4, 5];
   const defaultValue = userId ? userId : 'Select an User ID';
-  const options = [<option key={0} value='before'>
+  const options = [<option key={0} value='before' className={styles.option}>
     Select an User ID
   </option>];
   availableUserIds.forEach(function (id) {
@@ -15,11 +15,11 @@ export default function SelectUser({ userId }) {
   return (
     <div className={styles['form-wrapper']}>
       <form action='/' className={styles.form}>
-        <label>Choose a User:</label>
+        <label className={styles.label}>Choose a User:</label>
         <select defaultValue={defaultValue} name='userId' id='userId' className={styles.select}>
           {options}
         </select>
-        <input type='submit' value='Submit' className={styles.submit} />
+        <input type='submit' value='Apply' className={styles.submit} />
       </form>
     </div>
   );

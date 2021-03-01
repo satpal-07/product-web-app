@@ -7,67 +7,113 @@ import getUserInfo from '../services/getUserInfo';
 import ProductList from '../components/ProductList';
 import SelectUser from '../components/SelectUser';
 import { useRouter } from 'next/router';
+import Constants from '../contants';
 
-const addBadgesToProductList = (productList, userInfo) => {
-  const userOffers = userInfo.offers;
-  const availableBadges = getAvailableBadges(userInfo.available_badges);
-
+const addBadgesToProductList = (productList, availableBadges) => {
   for (const product of productList) {
-    product.associatedBadge = getAssociatedBadge(
-      product,
-      userOffers,
-      availableBadges
-    );
+    product.associatedBadge = getAssociatedBadge(product, availableBadges);
   }
   return productList;
 };
 
-const getAssociatedBadge = (product, userOffers, availableBadges) => {
+const getAssociatedBadge = (product, availableBadges) => {
   let associatedBadge = null;
-  for (const offer of userOffers) {
+  for (const badge of availableBadges) {
     if (associatedBadge) break;
-    // TODO: simplify below logic
-    if (product.offer_ids.indexOf(offer.id) !== -1) {
-      associatedBadge = availableBadges.find((badge) => {
-        if (badge.types.indexOf(offer.type) !== -1) {
-          return badge;
+    // only check the badge id if its offer is offered to user and badge is available to user
+    if (badge.isBadgeApplicable)
+      for (const type of badge.types) {
+        if (product.offer_ids.indexOf(type.id) !== -1) {
+          associatedBadge = badge;
+          break;
         }
-      });
-    }
+      }
   }
+
   return associatedBadge ? associatedBadge : null;
 };
 
-const getAvailableBadges = (badges) => {
-  const splitBadges = badges.split('||');
-  const availableBadges = [];
-  // decode the badges
-  for (const badge of splitBadges) {
-    const splitBadge = badge.split(':');
-    const decodedBadge = {
-      name: splitBadge[0],
-      types: splitBadge[1].split(','),
-    };
-    availableBadges.push(decodedBadge);
+const getAvailableBadges = (badges, userOffers) => {
+  try {
+    const splitBadges = badges.split('||');
+    const availableBadges = [];
+    // decode the badges
+    for (const badge of splitBadges) {
+      const splitBadge = badge.split(':');
+      const suitableOffers = identifySuitableOffers(
+        splitBadge[1].split(','),
+        userOffers
+      );
+      const decodedBadge = {
+        name: splitBadge[0],
+        ...suitableOffers,
+      };
+      availableBadges.push(decodedBadge);
+    }
+    return availableBadges;
+  } catch (error) {
+    console.error('Error while getting available badges: ' + error.message);
+    return [];
   }
-  return availableBadges;
+};
+
+const identifySuitableOffers = (badgeTypes, userOffers) => {
+  const applicableOffers = {
+    isBadgeApplicable: false,
+    types: [],
+  };
+  try {
+    for (const badgeType of badgeTypes) {
+      let type = { name: badgeType };
+      let matchedOffer = userOffers.find(
+        (userOffer) => userOffer.type === badgeType
+      );
+      // offer is matched when offer is offered to user and badge associated with the available offer
+      if (matchedOffer) {
+        type.id = matchedOffer.id;
+        type.title = matchedOffer.title;
+        applicableOffers.isBadgeApplicable = true;
+      }
+      applicableOffers.types.push(type);
+    }
+    return applicableOffers;
+  } catch (error) {
+    console.error('Error while identifying suitable offers: ' + error.message);
+    return applicableOffers;
+  }
 };
 
 export async function getServerSideProps({ query }) {
   try {
-    if (!query.userId) {
-      throw new Error('User ID is not passed.');
-    }
-    console.log('Loading the User info...');
-    const userInfo = await getUserInfo(query.userId);
-    console.log('Finished loadingUser info.');
     console.log('Loading the products list...');
     const productList = await getProductList();
-    const productListWithBadge = addBadgesToProductList(productList, userInfo);
-    console.log('Finished loadingproduct list.');
+    console.log('Finished loading product list.');
+    if (query.userId) {
+      console.log('Loading the User info...');
+      const userInfo = await getUserInfo(query.userId);
+      console.log('Finished loadingUser info.');
+
+      console.log('Getting available badges...');
+      const availableBadges = getAvailableBadges(
+        userInfo.available_badges,
+        userInfo.offers
+      );
+      console.log('Finished getting available badges.');
+      console.log('Attaching badges to product list...');
+      const productListWithBadge = addBadgesToProductList(
+        productList,
+        availableBadges
+      );
+      console.log('Finished attaching badges to product list.');
+      return {
+        props: {
+          productList: productListWithBadge,
+        },
+      };
+    }
     return {
       props: {
-        productList: productListWithBadge,
+        productList,
       },
     };
   } catch (error) {
@@ -88,13 +134,14 @@ export default function Home({ productList }) {
       <Head>
         <title>Product</title>
       </Head>
-      <Header title='Product List'></Header>
+      <Header title={Constants.HEADER}></Header>
       <main>
         <SelectUser userId={userId} />
-        {productList.map((product) => {
-          return <ProductList product={product} key={product.id} />;
-        })}
-        {/* {productListTags} */}
+        <div className={styles['product-list']}>
+          {productList.map((product) => {
+            return <ProductList product={product} key={product.id} />;
+          })}
+        </div>
       </main>
       <Footer />
     </div>
