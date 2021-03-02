@@ -11,44 +11,57 @@ export default function ProductInfo({ product }) {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.card}>
-        <img
-          src={Constants.IMAGE_URL + product?.image_key}
-          alt={product?.name}
-        ></img>
-        <div className={styles['card-text']}>
-          <div>
-            <h2>{product?.name}</h2>
+      {product ? (
+        <div className={styles.card}>
+          <img
+            className={styles.image}
+            src={Constants.IMAGE_URL + product?.image_key}
+            alt={product?.name}
+          ></img>
+          <div className={styles['card-text']}>
+            <div>
+              <h2>{product?.name}</h2>
+            </div>
+            {product?.price?.current_price && (
+              <div>
+                <p className='bold'>
+                  Current price: {`${priceSign}${product.price.current_price}`}
+                </p>
+              </div>
+            )}
+            {product?.price?.original_price && (
+              <div>
+                <p className='bold'>
+                  Original price:{' '}
+                  {`${priceSign}${product.price.original_price}`}
+                </p>
+              </div>
+            )}
+            {product?.information[0]?.section_text && (
+              <div className={styles['info']}>
+                <p>
+                  <span className='bold'>Description: </span>
+                  {product?.information[0]?.section_text}
+                </p>
+              </div>
+            )}
+            <div className={styles['button-wrap']}>
+              <Link href={userId ? `/?userId=${userId}` : '/'}>
+                <button className={styles.button}>Back</button>
+              </Link>
+            </div>
           </div>
-          {product?.price?.current_price && (
-            <div>
-              <p className='bold'>
-                Current price: {`${priceSign}${product.price.current_price}`}
-              </p>
-            </div>
-          )}
-          {product?.price?.original_price && (
-            <div>
-              <p className='bold'>
-                Original price: {`${priceSign}${product.price.original_price}`}
-              </p>
-            </div>
-          )}
-          {product?.information[0]?.section_text && (
-            <div className={styles['info']}>
-              <p>
-                <span className='bold'>Description: </span>
-                {product?.information[0]?.section_text}
-              </p>
-            </div>
-          )}
+        </div>
+      ) : (
+        <div className={styles['no-product']}>
+          <h2>Product not available</h2>{' '}
           <div className={styles['button-wrap']}>
-            <Link href={`/?userId=${userId}`}>
-              <button className={styles.button}>Back</button>
+            <Link href={userId ? `/?userId=${userId}` : '/'}>
+              <button className={styles.button}>Home</button>
             </Link>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

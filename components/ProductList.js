@@ -8,7 +8,13 @@ export default function ProductList({ product, userId }) {
   let priceSign = getCurrencySign(product?.price?.currency_code);
 
   return (
-    <Link href={`/product?id=${product.id}&userId=${userId}`}>
+    <Link
+      href={
+        userId
+          ? `/product?id=${product.id}&userId=${userId}`
+          : `/product?id=${product.id}`
+      }
+    >
       <div className={styles.card}>
         <div className={styles['image-wrapper']}>
           <img

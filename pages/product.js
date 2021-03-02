@@ -34,7 +34,7 @@ export default function Product({product}) {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>M&S Coding Test</title>
       </Head>
       <Header title={Constants.HEADER}></Header>
       <main>

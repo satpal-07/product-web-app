@@ -123,31 +123,36 @@ export async function getServerSideProps({ query }) {
     console.log('Loading the products list...');
     const productList = await getProductList();
     console.log('Finished loading product list.');
-    // get the user related offers and the applicable badges
-    if (query.userId) {
+    // get the user related offers and the applicable badges when user id is valid
+    if (
+      query.userId &&
+      !isNaN(query.userId) &&
+      Constants.USER_IDS.indexOf(Number(query.userId)) !== -1
+    ) {
       console.log('Loading the User info...');
       const userInfo = await getUserInfo(query.userId);
       console.log('Finished loadingUser info.');
-
-      console.log('Getting available badges...');
-      const availableBadges = getAvailableBadges(
-        userInfo.available_badges,
-        userInfo.offers
-      );
-      console.log('Finished getting available badges.');
-      console.log('Attaching badges to product list...');
-      const productListWithBadge = addBadgesToProductList(
-        productList,
-        availableBadges
-      );
-      console.log('Finished attaching badges to product list.');
-      return {
-        props: {
-          productList: productListWithBadge,
-        },
-      };
+      if (userInfo) {
+        console.log('Getting available badges...');
+        const availableBadges = getAvailableBadges(
+          userInfo.available_badges,
+          userInfo.offers
+        );
+        console.log('Finished getting available badges.');
+        console.log('Attaching badges to product list...');
+        const productListWithBadge = addBadgesToProductList(
+          productList,
+          availableBadges
+        );
+        console.log('Finished attaching badges to product list.');
+        return {
+          props: {
+            productList: productListWithBadge,
+          },
+        };
+      }
     }
-    // return normal product list if no user id is selected by the user
+    // return normal product list if no user id is selected by the user or user info is available
     return {
       props: {
         productList,
@@ -188,7 +193,7 @@ export default function Home({ productList }) {
           </div>
         ) : (
           <div className={styles['empty-product']}>
-            <h3>No product available</h3>
+            <h3>No products available</h3>
           </div>
         )}
       </main>
