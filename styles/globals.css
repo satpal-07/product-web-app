@@ -1,3 +1,8 @@
+:root {
+  --universal-color: #dfece2;
+  --border-color: #a8ccb0;
+}
+
 html,
 body {
   padding: 0;
@@ -17,4 +22,8 @@ a {
 
 option[value='before'] {
   display: none;
+}
+
+.bold {
+  font-weight: bold;
 }

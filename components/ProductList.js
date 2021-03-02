@@ -1,50 +1,17 @@
 import styles from '../styles/ProductList.module.css';
 import Constants from '../contants/index';
 import Link from 'next/link';
+import { getBadge, getCurrencySign } from './utils/helper';
 
-const assignBadge = (name) => {
-  let badge;
-  switch (name) {
-    case 'loyalty':
-      badge = '/loyalty_icon.png';
-      break;
-    case 'gonesoon':
-      badge = '/gonesoon_icon.png';
-      break;
-    case 'sale':
-      badge = '/sale_icon.png';
-      break;
-    default:
-      '';
-  }
-  return badge;
-};
-
-const getCurrencySign = (currencyCode) => {
-  let currencySign;
-  switch (currencyCode) {
-    case 'GBP':
-      currencySign = '£';
-      break;
-    case 'USD':
-      currencySign = '$';
-      break;
-    default:
-      '';
-  }
-  return currencySign;
-};
-
-export default function ProductList({ product }) {
-  let badge = assignBadge(product?.associatedBadge?.name);
+export default function ProductList({ product, userId }) {
+  let badge = getBadge(product?.associatedBadge?.name);
   let priceSign = getCurrencySign(product?.price?.currency_code);
 
   return (
-    <Link href={`/product?id=${product.id}`}>
+    <Link href={`/product?id=${product.id}&userId=${userId}`}>
       <div className={styles.card}>
         <div className={styles['image-wrapper']}>
           <img
-            className={styles.image}
             src={Constants.IMAGE_URL + product.image_key}
             alt={product.name}
           ></img>
@@ -58,16 +25,20 @@ export default function ProductList({ product }) {
         </div>
 
         <div className={styles.info}>
-          <div className={styles.name}>
-            <p>{product.name}</p>
+          <div>
+            <p className='bold'>{product.name}</p>
           </div>
-          <div className={styles['current-price']}>
-            <p>Price Now: {`${priceSign} ${product.price.current_price}`}</p>
+          <div>
+            <p>
+              Price Now:{' '}
+              <span className='bold'>{`${priceSign}${product.price.current_price}`}</span>
+            </p>
           </div>
-          <div className={styles['original-price']}>
+          <div>
             {product.price.original_price && (
               <p>
-                Original Price: {`${priceSign} ${product.price.original_price}`}
+                Original Price:{' '}
+                <span className='bold'>{`${priceSign}${product.price.original_price}`}</span>
               </p>
             )}
           </div>

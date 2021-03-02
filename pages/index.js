@@ -9,13 +9,31 @@ import SelectUser from '../components/SelectUser';
 import { useRouter } from 'next/router';
 import Constants from '../contants';
 
+/**
+ * Adds badges to the product list provided
+ * @param {Array} productList
+ * @param {Array} availableBadges
+ * @returns {Array} product list
+ */
 const addBadgesToProductList = (productList, availableBadges) => {
-  for (const product of productList) {
-    product.associatedBadge = getAssociatedBadge(product, availableBadges);
+  try {
+    for (const product of productList) {
+      product.associatedBadge = getAssociatedBadge(product, availableBadges);
+    }
+  } catch (error) {
+    console.error(
+      'Error while adding badges to the product list: ' + error.message
+    );
   }
   return productList;
 };
 
+/**
+ * Returns badges associated to the product
+ * @param {Object} product
+ * @param {Array} availableBadges
+ * @returns {Object} associated badges
+ */
 const getAssociatedBadge = (product, availableBadges) => {
   let associatedBadge = null;
   for (const badge of availableBadges) {
@@ -33,6 +51,12 @@ const getAssociatedBadge = (product, availableBadges) => {
   return associatedBadge ? associatedBadge : null;
 };
 
+/**
+ *  Returns the badges available to the user
+ * @param {String} badges
+ * @param {Array} userOffers offers related to the user
+ * @returns {Array} available badges
+ */
 const getAvailableBadges = (badges, userOffers) => {
   try {
     const splitBadges = badges.split('||');
@@ -57,6 +81,12 @@ const getAvailableBadges = (badges, userOffers) => {
   }
 };
 
+/**
+ * Identifies suitable offers to the user using the badges available and offer to the user
+ * @param {Array} badgeTypes
+ * @param {Array} userOffers
+ * @returns {Object} suitable offers
+ */
 const identifySuitableOffers = (badgeTypes, userOffers) => {
   const applicableOffers = {
     isBadgeApplicable: false,
@@ -83,11 +113,17 @@ const identifySuitableOffers = (badgeTypes, userOffers) => {
   }
 };
 
+/**
+ * Loads the product list and badges associated to them on server side when page is requested from the next server
+ * @param {req} - URL query
+ * @returns product props using the Graph QL server
+ */
 export async function getServerSideProps({ query }) {
   try {
     console.log('Loading the products list...');
     const productList = await getProductList();
     console.log('Finished loading product list.');
+    // get the user related offers and the applicable badges
     if (query.userId) {
       console.log('Loading the User info...');
       const userInfo = await getUserInfo(query.userId);
@@ -111,6 +147,7 @@ export async function getServerSideProps({ query }) {
         },
       };
     }
+    // return normal product list if no user id is selected by the user
     return {
       props: {
         productList,
@@ -137,11 +174,23 @@ export default function Home({ productList }) {
       <Header title={Constants.HEADER}></Header>
       <main>
         <SelectUser userId={userId} />
-        <div className={styles['product-list']}>
-          {productList.map((product) => {
-            return <ProductList product={product} key={product.id} />;
-          })}
-        </div>
+        {productList && productList.length > 0 ? (
+          <div className={styles['product-list']}>
+            {productList.map((product) => {
+              return (
+                <ProductList
+                  product={product}
+                  key={product.id}
+                  userId={userId}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div className={styles['empty-product']}>
+            <h3>No product available</h3>
+          </div>
+        )}
       </main>
       <Footer />
     </div>

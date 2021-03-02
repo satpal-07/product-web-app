@@ -1,5 +1,9 @@
 import graphQlApi from './utils/graphql-api';
 
+/**
+ * Returns product list query
+ * @returns {String} Graph QL query
+ */
 const getProductQuery = () => {
   return `{
     productList {
@@ -16,6 +20,10 @@ const getProductQuery = () => {
   }`;
 };
 
+/**
+ * Returns product list after getting it from the Graph QL API
+ * @returns {Array} Product list
+ */
 export default async () => {
   try {
     const response = await graphQlApi(getProductQuery());

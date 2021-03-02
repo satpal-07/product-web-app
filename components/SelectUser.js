@@ -1,22 +1,34 @@
-import styles from '../styles/SelectUser.module.css'
+import Constants from '../contants';
+import styles from '../styles/SelectUser.module.css';
+
 export default function SelectUser({ userId }) {
-  const availableUserIds = [1, 2, 3, 4, 5];
+  const userIds = Constants.USER_IDS;
   const defaultValue = userId ? userId : 'Select an User ID';
-  const options = [<option key={0} value='before' className={styles.option}>
-    Select an User ID
-  </option>];
-  availableUserIds.forEach(function (id) {
+  // set the initially selected option
+  const options = [
+    <option key={0} value='before'>
+      Select User ID
+    </option>,
+  ];
+  // add the rest of the options
+  userIds.forEach(function (id) {
     options.push(
-      <option className={styles.option} key={id} value={id}>
-        {id}
+      <option key={id} value={id}>
+        {`User ID: ${id}`}
       </option>
     );
   });
+
   return (
     <div className={styles['form-wrapper']}>
-      <form action='/' className={styles.form}>
+      <form action='/'>
         <label className={styles.label}>Choose a User:</label>
-        <select defaultValue={defaultValue} name='userId' id='userId' className={styles.select}>
+        <select
+          defaultValue={defaultValue}
+          name='userId'
+          id='userId'
+          className={styles.select}
+        >
           {options}
         </select>
         <input type='submit' value='Apply' className={styles.submit} />

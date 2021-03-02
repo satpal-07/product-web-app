@@ -1,11 +1,15 @@
 import Head from 'next/head';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import styles from '../styles/Product.module.css';
 import getProductInfo from '../services/getProductInfo';
 import ProductInfo from '../components/ProductInfo';
 import Constants from '../contants';
 
+/**
+ * Loads the product info on server side when page is requested from the next server
+ * @param {req} - URL query
+ * @returns product props using the Graph QL server
+ */
 export async function getServerSideProps({ query }) {
   try {
     console.log('Loading the product info...');

@@ -1,6 +1,11 @@
 import graphQlApi from './utils/graphql-api';
 
-const getUserInfoQuery = userId => {
+/**
+ * Returns user info query
+ * @param {String} userId
+ * @returns {String} Graph QL query
+ */
+const getUserInfoQuery = (userId) => {
   return `{
     user(id: "${userId}") {
       id
@@ -14,6 +19,11 @@ const getUserInfoQuery = userId => {
   }`;
 };
 
+/**
+ * Returns user info after getting it from the Graph QL API
+ * @param {String} userId
+ * @returns {Object} user info
+ */
 export default async (userId) => {
   try {
     const response = await graphQlApi(getUserInfoQuery(userId));

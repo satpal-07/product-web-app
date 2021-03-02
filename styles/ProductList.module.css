@@ -23,7 +23,7 @@
 .card:hover,
 .card:focus,
 .card:active {
-  border-color: #0070f3;
+  border-color: var(--border-color);
 }
 
 .card h3 {
@@ -33,32 +33,17 @@
 
 .card p {
   margin: 0;
-  font-size: 1.25rem;
   line-height: 1.5;
-}
-
-.info {
 }
 
 .image-wrapper {
   position: relative;
 }
 
-.image {
-}
 
 .badge {
   position: absolute;
   right: 0;
-}
-
-.name {
-}
-
-.current-price {
-}
-
-.original-price {
 }
 
 @media (max-width: 600px) {

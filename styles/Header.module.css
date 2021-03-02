@@ -3,8 +3,7 @@
 }
 
 .top-title {
-  background-color: #ffffff;
-  background-color: #dfece2;
+  background-color: var(--universal-color);
   color: #000000;
   padding: 1rem 0;
 }
