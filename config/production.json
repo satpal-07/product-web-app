@@ -1,0 +1,3 @@
+{
+  "graphQlApi": "http://graph-ql-server:3001/graphql"
+}
