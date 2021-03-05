@@ -180,17 +180,7 @@ export default function Home({ productList }) {
       <main>
         <SelectUser userId={userId} />
         {productList && productList.length > 0 ? (
-          <div className={styles['product-list']}>
-            {productList.map((product) => {
-              return (
-                <ProductList
-                  product={product}
-                  key={product.id}
-                  userId={userId}
-                />
-              );
-            })}
-          </div>
+          <ProductList productList={productList} userId={userId} />
         ) : (
           <div className={styles['empty-product']}>
             <h3>No products available</h3>
