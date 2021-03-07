@@ -3,7 +3,7 @@ import Constants from '../contants/index';
 import Link from 'next/link';
 import { getBadge, getCurrencySign } from './utils/helper';
 
-export default function ProductListCard ({ product, userId })  {
+export default function ProductListCard ({ product, userId, currentPage })  {
   let badge = getBadge(product?.associatedBadge?.name);
   let priceSign = getCurrencySign(product?.price?.currency_code);
 
@@ -11,8 +11,8 @@ export default function ProductListCard ({ product, userId })  {
     <Link
       href={
         userId
-          ? `/product?id=${product.id}&userId=${userId}`
-          : `/product?id=${product.id}`
+          ? `/product?id=${product.id}&page=${currentPage}&userId=${userId}`
+          : `/product?id=${product.id}&page=${currentPage}`
       }
     >
       <div className={styles.card}>

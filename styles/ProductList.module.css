@@ -26,11 +26,12 @@
 }
 .prev-page:hover,
 .next-page:hover {
-  border-width: 2px;
+  border: var(--border-color) solid 2px;
 }
 .prev-page:hover > .icon,
 .next-page:hover > .icon {
   width: 30px;
+  filter: invert(88%) sepia(18%) saturate(337%) hue-rotate(81deg) brightness(87%) contrast(89%);
 }
 
 .disable-page {

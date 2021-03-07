@@ -170,7 +170,7 @@ export async function getServerSideProps({ query }) {
 
 export default function Home({ productList }) {
   const router = useRouter();
-  const { userId } = router.query;
+  const { userId, page } = router.query;
   return (
     <div>
       <Head>
@@ -180,7 +180,7 @@ export default function Home({ productList }) {
       <main>
         <SelectUser userId={userId} />
         {productList && productList.length > 0 ? (
-          <ProductList productList={productList} userId={userId} />
+          <ProductList productList={productList} userId={userId} page={page} />
         ) : (
           <div className={styles['empty-product']}>
             <h3>No products available</h3>

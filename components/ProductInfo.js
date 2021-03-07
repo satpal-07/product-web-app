@@ -6,7 +6,7 @@ import { getCurrencySign } from './utils/helper';
 
 export default function ProductInfo({ product }) {
   const router = useRouter();
-  const { userId } = router.query;
+  const { userId, page } = router.query;
   const priceSign = getCurrencySign(product?.price?.currency_code);
 
   return (
@@ -46,7 +46,7 @@ export default function ProductInfo({ product }) {
               </div>
             )}
             <div className={styles['button-wrap']}>
-              <Link href={userId ? `/?userId=${userId}` : '/'}>
+              <Link href={userId ? `/?page=${page}&userId=${userId}` : `/?page=${page}`}>
                 <button className={styles.button}>Back</button>
               </Link>
             </div>

@@ -1,14 +1,20 @@
 import styles from '../styles/ProductList.module.css';
 import { useMemo, useState } from 'react';
 import ProductListCard from './ProductListCard';
+import { isPageValid } from './utils/helper';
 const productsPerPage = 12;
-export default function ProductList({ productList, userId }) {
+
+export default function ProductList({ productList, userId, page }) {
   const totalPages = Math.ceil(productList.length / productsPerPage);
   const [currentProductList, setCurrentProductList] = useState([]);
   const [pages, setPages] = useState({
-    currentPage: 1,
-    nextPage: totalPages > 2 ? 2 : null,
-    prevPage: 0,
+    currentPage: isPageValid(page, totalPages) ? Number(page) : 1,
+    nextPage: isPageValid(page, totalPages)
+      ? Number(page) + 1
+      : totalPages > 2
+      ? 2
+      : 1,
+    prevPage: isPageValid(page, totalPages) ? Number(page) - 1 : 0,
   });
 
   const updateCurrentProductList = () => {
@@ -46,7 +52,12 @@ export default function ProductList({ productList, userId }) {
     <div>
       <div className={styles.list}>
         {currentProductList.map((product) => (
-          <ProductListCard product={product} key={product.id} userId={userId} />
+          <ProductListCard
+            product={product}
+            key={product.id}
+            userId={userId}
+            currentPage={pages.currentPage}
+          />
         ))}
       </div>{' '}
       <div className={styles['pagination-wrap']}>

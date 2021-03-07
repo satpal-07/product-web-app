@@ -41,7 +41,18 @@ const getCurrencySign = (currencyCode) => {
   return currencySign;
 };
 
+/**
+ * Returns true if provided page is valid number and less than totalPages provided
+ * @param {String} page page number in string
+ * @param {number} totalPages total page number
+ * @returns {Boolean} true is page is number and less than total pages else false
+ */
+const isPageValid = (page, totalPages) => {
+  return !isNaN(page) && Number(page) > 0 && totalPages >= Number(page);
+};
+
 module.exports = {
   getCurrencySign,
   getBadge,
+  isPageValid,
 };
