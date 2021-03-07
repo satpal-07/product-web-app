@@ -24,7 +24,13 @@ export default function ProductList({ productList, userId }) {
     setCurrentProductList(newCurrentProductList);
   };
 
-  const onClickPageHandler = (prevPage, currentPage, nextPage) => {
+  const onClickPageHandler = (
+    prevPage,
+    currentPage,
+    nextPage,
+    isActive = true
+  ) => {
+    if (!isActive) return;
     const updatedPages = {
       prevPage,
       currentPage,
@@ -44,37 +50,57 @@ export default function ProductList({ productList, userId }) {
         ))}
       </div>{' '}
       <div className={styles['pagination-wrap']}>
-        {pages.prevPage > 0 && (
-          <div
-            className={`${styles.pagination} ${styles['prev-page']}`}
-            onClick={() =>
-              onClickPageHandler(
-                pages.prevPage - 1,
-                pages.prevPage,
-                pages.nextPage - 1
-              )
+        <div
+          className={
+            pages.prevPage > 0
+              ? `${styles['prev-page']} ${styles.pagination}`
+              : `${styles['disable-page']} ${styles.pagination}`
+          }
+          onClick={() =>
+            onClickPageHandler(
+              pages.prevPage - 1,
+              pages.prevPage,
+              pages.nextPage - 1,
+              pages.prevPage > 0
+            )
+          }
+        >
+          <img
+            className={
+              pages.prevPage > 0
+                ? `${styles.icon}`
+                : `${styles.icon} ${styles['disable-icon']}`
             }
-          >
-            <p>{pages.prevPage}</p>
-          </div>
-        )}
-        <div className={`${styles.pagination} ${styles['current-page']}`}>
-          <p>{pages.currentPage}</p>
+            src='/prev_icon.svg'
+          ></img>
         </div>
-        {pages.nextPage <= totalPages && (
-          <div
-            className={`${styles.pagination} ${styles['next-page']}`}
-            onClick={() =>
-              onClickPageHandler(
-                pages.prevPage + 1,
-                pages.nextPage,
-                pages.nextPage + 1
-              )
+        <div className={styles.pagination}>
+          <p>Page {pages.currentPage}</p>
+        </div>
+        <div
+          className={
+            pages.nextPage <= totalPages
+              ? `${styles['next-page']} ${styles.pagination}`
+              : `${styles['disable-page']} ${styles.pagination}`
+          }
+          onClick={() =>
+            onClickPageHandler(
+              pages.prevPage + 1,
+              pages.nextPage,
+              pages.nextPage + 1,
+              pages.nextPage <= totalPages
+            )
+          }
+        >
+          <img
+            className={
+              pages.nextPage <= totalPages
+                ? `${styles.icon}`
+                : `${styles.icon} ${styles['disable-icon']}`
             }
-          >
-            <p>{pages.nextPage}</p>
-          </div>
-        )}
+            src='/next_icon.svg'
+          ></img>
+        </div>
       </div>
     </div>
   );
